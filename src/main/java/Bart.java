@@ -1,11 +1,19 @@
+import java.util.Scanner;
+
 public class Bart {
 
     public static void print(String msg) {
-        System.out.println(msg);
+        System.out.println("    " + msg);
     }
 
     public static void divider() {
-        System.out.println("____________________________________________________________");
+        System.out.println("    ____________________________________________________________");
+    }
+
+    public static String getUserInput() {
+        Scanner in = new Scanner(System.in);
+        return in.nextLine();
+
     }
 
     public static void main(String[] args) {
@@ -18,6 +26,23 @@ public class Bart {
         divider();
         print("Hello! I'm Bartholomew, but you can call me Bart");
         print("What can I do for you?");
+        divider();
+
+        boolean isAnswering = true;
+
+        while (isAnswering) {
+            String userInput = getUserInput();
+
+            if (userInput.equals("bye")) {
+                isAnswering = false;
+            } else {
+                divider();
+                print(userInput);
+                divider();
+            }
+
+        }
+
         divider();
         print("Bye. Hope to see you again soon!");
         divider();
