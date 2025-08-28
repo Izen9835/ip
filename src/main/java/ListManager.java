@@ -28,32 +28,34 @@ class ListItem {
 }
 
 public class ListManager {
-    private List<ListItem> list;
+    private List<ListItem> items;
 
     public ListManager() {
-        this.list = new ArrayList<>();
+        this.items = new ArrayList<>();
     }
 
     public void addItem(String name) {
-        list.add(new ListItem(name));
+        items.add(new ListItem(name));
     }
 
     public void markItem(int index) {
-        list.get(index).markThis();
+        items.get(index).markThis();
     }
 
     public void unmarkItem(int index) {
-        list.get(index).unmarkThis();
+        items.get(index).unmarkThis();
     }
 
     public void printItems() {
-        for (int i = 0; i < list.toArray().length; i++) {
+        for (int i = 0; i < items.toArray().length; i++) {
             System.out.print("  ");
             System.out.print(i+1);
             System.out.print(". ");
-            if (list.get(i).getIsMarked()) System.out.print("[X] ");
+
+            if (items.get(i).getIsMarked()) System.out.print("[X] ");
             else System.out.print("[ ] ");
-            System.out.println(list.get(i).getName());
+
+            System.out.println(items.get(i).getName());
         }
     }
 }
