@@ -1,32 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class ListItem {
-    private boolean isMarked = false;
-    private String name;
-
-    public ListItem(String name){
-        this.isMarked = false;
-        this.name = name;
-    }
-
-    public boolean getIsMarked() {
-        return this.isMarked;
-    }
-
-    public void markThis() {
-        this.isMarked = true;
-    }
-
-    public void unmarkThis() {
-        this.isMarked = false;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-}
-
 public class ListManager {
     private List<ListItem> items;
 
@@ -34,8 +8,22 @@ public class ListManager {
         this.items = new ArrayList<>();
     }
 
-    public void addItem(String name) {
-        items.add(new ListItem(name));
+    public String addTodo(String name) {
+        ListItem todo = new Todo(name);
+        items.add(todo);
+        return todo.toString();
+    }
+
+    public String addDeadline(String name, String by) {
+        ListItem deadline = new Deadline(name, by);
+        items.add(deadline);
+        return deadline.toString();
+    }
+
+    public String addEvent(String name, String start, String end) {
+        ListItem event = new Event(name, start, end);
+        items.add(event);
+        return event.toString();
     }
 
     public void markItem(int index) {
@@ -48,14 +36,11 @@ public class ListManager {
 
     public void printItems() {
         for (int i = 0; i < items.toArray().length; i++) {
-            System.out.print("  ");
+            System.out.print("       ");
             System.out.print(i+1);
             System.out.print(". ");
 
-            if (items.get(i).getIsMarked()) System.out.print("[X] ");
-            else System.out.print("[ ] ");
-
-            System.out.println(items.get(i).getName());
+            System.out.println(items.get(i).toString());
         }
     }
 }

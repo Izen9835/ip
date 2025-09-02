@@ -21,14 +21,11 @@ public class Bart {
         for (int i = 0; i < logo.length; i++) {
             System.out.println(logo[i]);
         }
-
-
     }
 
     public static String getUserInput() {
         Scanner in = new Scanner(System.in);
         return in.nextLine();
-
     }
 
     public static void main(String[] args) {
@@ -88,11 +85,84 @@ public class Bart {
                         divider();
                     }
 
+                } else if (userInput.startsWith("todo ")) {
+                    String name = userInput.substring(5).trim();
+
+                    if (name.isBlank()) {
+                        divider();
+                        print("no todo item was specified.");
+                        divider();
+
+                    } else {
+                        String itemToString = _listManager.addTodo(name);
+                        divider();
+                        print("todo added.");
+                        print("  " + itemToString);
+                        divider();
+                    }
+
+
+                } else if (userInput.startsWith("deadline ")) {
+                    // remove "deadline "
+                    // for parsing
+                    String input = userInput.substring(9).trim();
+
+                    // find index of "/by"
+                    int byIndex = input.indexOf(" /by ");
+
+                    if (byIndex == -1) { // keyword is not found
+                        divider();
+                        print("input format incorrect");
+                        divider();
+
+                    } else {
+                        String description = input.substring(0, byIndex);
+
+                        String by = input.substring(byIndex + " /by ".length());
+
+                        // add to list
+                        String itemToString = _listManager.addDeadline(description, by);
+                        divider();
+                        print("deadline added.");
+                        print("  " + itemToString);
+                        divider();
+                    }
+
+                } else if (userInput.startsWith("event ")) {
+                    // remove the "event " in front
+                    // for parsing input
+                    String input = userInput.substring(6).trim();
+
+                    // find indices of the keywords
+                    int fromIndex = input.indexOf(" /from ");
+                    int toIndex = input.indexOf(" /to ");
+
+                    if (fromIndex == -1 || toIndex == -1) { // keyword is missing
+                        divider();
+                        print("input format incorrect");
+                        divider();
+
+                    } else {
+                        // parse task description between "event " and "/from"
+                        String description = input.substring(0, fromIndex);
+
+                        // parse start time after "/from " and before "/to"
+                        String start = input.substring(fromIndex + " /from ".length(), toIndex);
+
+                        // parse end time after "/to "
+                        String end = input.substring(toIndex + " /to ".length());
+
+                        // add to list
+                        String itemToString = _listManager.addEvent(description, start, end);
+                        divider();
+                        print("event added.");
+                        print("  " + itemToString);
+                        divider();
+                    }
+
                 } else {
-                    // adds item to list
-                    _listManager.addItem(userInput);
                     divider();
-                    print("Added: " + userInput);
+                    print("input keyword not found");
                     divider();
                 }
             }
