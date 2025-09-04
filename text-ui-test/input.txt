@@ -1,0 +1,9 @@
+list
+deadline read books /by 8 Jan 2029
+event birthday /from 12 August /to 12 August
+list
+mark 1
+list
+unmark 1
+list
+bye

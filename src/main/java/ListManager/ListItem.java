@@ -1,3 +1,5 @@
+package ListManager;
+
 class ListItem {
     private boolean isMarked = false;
     private String description;

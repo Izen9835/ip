@@ -1,3 +1,5 @@
+package ListManager;
+
 public class Todo extends ListItem{
     // [T][ ] <description>
 
@@ -9,6 +11,7 @@ public class Todo extends ListItem{
     @Override
     public String toString() {
         String isDoneText = this.getIsMarked() ? "[X]" : "[ ]";
+        
         return "[T]" + isDoneText + " " + this.getDescription();
      }
 }
