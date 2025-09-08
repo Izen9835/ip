@@ -1,6 +1,6 @@
 package ListManager;
 
-public class Deadline extends ListItem{
+public class Deadline extends ListItem {
     private String by;
 
     public Deadline(String description, String by) {
@@ -11,7 +11,7 @@ public class Deadline extends ListItem{
     @Override
     public String toString() {
         String isDoneText = this.getIsMarked() ? "[X]" : "[ ]";
-        
+
         return "[D]" + isDoneText + " " + this.getDescription() + " (by: " + this.by + ")";
     }
 }

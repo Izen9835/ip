@@ -1,6 +1,6 @@
 package ListManager;
 
-public class Event extends ListItem{
+public class Event extends ListItem {
     private String start;
     private String end;
 
@@ -13,7 +13,7 @@ public class Event extends ListItem{
     @Override
     public String toString() {
         String isDoneText = this.getIsMarked() ? "[X]" : "[ ]";
-        
+
         return "[E]" + isDoneText + " " + this.getDescription() + " (from: " + this.start + " to: " + this.end + ")";
     }
 

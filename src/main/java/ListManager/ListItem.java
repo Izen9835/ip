@@ -4,7 +4,7 @@ class ListItem {
     private boolean isMarked = false;
     private String description;
 
-    public ListItem(String description){
+    public ListItem(String description) {
         this.isMarked = false;
         this.description = description;
     }
