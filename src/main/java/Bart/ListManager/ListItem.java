@@ -1,4 +1,4 @@
-package ListManager;
+package Bart.ListManager;
 
 class ListItem {
     private boolean isMarked = false;

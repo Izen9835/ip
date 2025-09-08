@@ -1,4 +1,4 @@
-package ListManager;
+package Bart.ListManager;
 
 import java.util.ArrayList;
 import java.util.List;
