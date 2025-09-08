@@ -1,17 +1,19 @@
+package Bart;
+
 import java.util.Scanner;
 
-import ListManager.ListManager;
-import Utils.BartUtils;
+import Bart.ListManager.ListManager;
+import Bart.Utils.BartUtils;
 
 /**
- * The main entry point for the Bart chatbot application.
- * Handles user input, command parsing, and interaction with the ListManager.
+ * The main entry point for the Bart.Bart chatbot application.
+ * Handles user input, command parsing, and interaction with the Bart.ListManager.
  */
 public class Bart {
 
     /**
-     * Starts the Bart chatbot application.
-     * Initializes the ListManager and processes user commands in a loop until "bye" is entered.
+     * Starts the Bart.Bart chatbot application.
+     * Initializes the Bart.ListManager and processes user commands in a loop until "bye" is entered.
      */
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -19,7 +21,7 @@ public class Bart {
 
         BartUtils.print("Hello from");
         BartUtils.printASCIIName();
-        BartUtils.printWithDivider("Hello! I'm Bartholomew, but you can call me Bart" + System.lineSeparator() + "      What can I do for you?");
+        BartUtils.printWithDivider("Hello! I'm Bartholomew, but you can call me Bart.Bart" + System.lineSeparator() + "      What can I do for you?");
 
         _listManager.printItems();
 
@@ -71,7 +73,7 @@ public class Bart {
      * Handles the "mark" command to mark a task as done.
      *
      * @param userInput    The full user input string.
-     * @param _listManager The ListManager instance to update.
+     * @param _listManager The Bart.ListManager instance to update.
      */
     private static void handleMark(String userInput, ListManager _listManager) {
         try {
@@ -91,7 +93,7 @@ public class Bart {
      * Handles the "unmark" command to mark a task as not done.
      *
      * @param userInput    The full user input string.
-     * @param _listManager The ListManager instance to update.
+     * @param _listManager The Bart.ListManager instance to update.
      */
     private static void handleUnmark(String userInput, ListManager _listManager) {
         try {
@@ -111,7 +113,7 @@ public class Bart {
      * Handles the "todo" command to add a new todo task.
      *
      * @param userInput    The full user input string.
-     * @param _listManager The ListManager instance to update.
+     * @param _listManager The Bart.ListManager instance to update.
      */
     private static void handleTodo(String userInput, ListManager _listManager) {
         String name = userInput.substring(5).trim();
@@ -130,7 +132,7 @@ public class Bart {
      * Handles the "deadline" command to add a new deadline task.
      *
      * @param userInput    The full user input string.
-     * @param _listManager The ListManager instance to update.
+     * @param _listManager The Bart.ListManager instance to update.
      */
     private static void handleDeadline(String userInput, ListManager _listManager) {
         // remove "deadline "
@@ -159,7 +161,7 @@ public class Bart {
      * Handles the "event" command to add a new event task.
      *
      * @param userInput    The full user input string.
-     * @param _listManager The ListManager instance to update.
+     * @param _listManager The Bart.ListManager instance to update.
      */
     private static void handleEvent(String userInput, ListManager _listManager) {
         // remove the "event " in front

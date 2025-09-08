@@ -1,4 +1,4 @@
-package ListManager;
+package Bart.ListManager;
 
 public class Deadline extends ListItem {
     private String by;

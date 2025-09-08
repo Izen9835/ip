@@ -1,4 +1,4 @@
-# Bart User Guide
+# Bart.Bart User Guide
 
 // Update the title above to match the actual product name
 
