@@ -23,7 +23,7 @@ public class ListManager {
     public String addTodo(String name) {
         ListItem todo = new Todo(name);
         items.add(todo);
-        
+
         return todo.toString();
     }
 
@@ -31,7 +31,7 @@ public class ListManager {
      * Adds a new Deadline item to the list.
      *
      * @param name The name or description of the Deadline.
-     * @param by The due date of the Deadline.
+     * @param by   The due date of the Deadline.
      * @return toString() of the added Deadline.
      */
     public String addDeadline(String name, String by) {
@@ -44,9 +44,9 @@ public class ListManager {
     /**
      * Adds a new Event item to the list.
      *
-     * @param name The name or description of the Event.
+     * @param name  The name or description of the Event.
      * @param start The start time of the Event.
-     * @param end The end time of the Event.
+     * @param end   The end time of the Event.
      * @return toString() of the added Event
      */
     public String addEvent(String name, String start, String end) {
@@ -70,7 +70,7 @@ public class ListManager {
     public void printItems() {
         for (int i = 0; i < items.toArray().length; i++) {
             // show index
-            System.out.print("       " + i+1 + ". ");
+            System.out.print("       " + i + 1 + ". ");
 
             // toString includes e.g. [D][ ] do this task (by: 8 Jan 2028)
             System.out.println(items.get(i).toString());

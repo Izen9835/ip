@@ -1,4 +1,5 @@
 import java.util.Scanner;
+
 import ListManager.ListManager;
 import Utils.BartUtils;
 
@@ -20,7 +21,7 @@ public class Bart {
         BartUtils.printASCIIName();
         BartUtils.printWithDivider("Hello! I'm Bartholomew, but you can call me Bart" + System.lineSeparator() + "      What can I do for you?");
 
-        _listManager.printItems(); 
+        _listManager.printItems();
 
 
         boolean isAnswering = true;
@@ -41,7 +42,7 @@ public class Bart {
                 BartUtils.divider();
                 _listManager.printItems();
                 BartUtils.divider();
-                
+
             } else if (userInput.startsWith("mark ")) {
                 handleMark(userInput, _listManager);
 
@@ -57,7 +58,7 @@ public class Bart {
             } else if (userInput.startsWith("event ")) {
                 handleEvent(userInput, _listManager);
 
-            } else { 
+            } else {
                 // key word unrecognised.
                 BartUtils.printWithDivider("input keyword not found");
             }
@@ -69,7 +70,7 @@ public class Bart {
     /**
      * Handles the "mark" command to mark a task as done.
      *
-     * @param userInput The full user input string.
+     * @param userInput    The full user input string.
      * @param _listManager The ListManager instance to update.
      */
     private static void handleMark(String userInput, ListManager _listManager) {
@@ -77,7 +78,7 @@ public class Bart {
             // Extract the number after "mark "
             String numberStr = userInput.substring(5).trim();
             int index = Integer.parseInt(numberStr);
-            _listManager.markItem(index-1); // convert to 0 indexing
+            _listManager.markItem(index - 1); // convert to 0 indexing
             BartUtils.printWithDivider("Marked item " + index);
 
         } catch (NumberFormatException e) {
@@ -89,7 +90,7 @@ public class Bart {
     /**
      * Handles the "unmark" command to mark a task as not done.
      *
-     * @param userInput The full user input string.
+     * @param userInput    The full user input string.
      * @param _listManager The ListManager instance to update.
      */
     private static void handleUnmark(String userInput, ListManager _listManager) {
@@ -97,9 +98,9 @@ public class Bart {
             // Extract the number after "mark "
             String numberStr = userInput.substring(7).trim();
             int index = Integer.parseInt(numberStr);
-            _listManager.unmarkItem(index-1); // convert to 0 indexing
+            _listManager.unmarkItem(index - 1); // convert to 0 indexing
             BartUtils.printWithDivider("Unmarked item " + index);
-            
+
         } catch (NumberFormatException e) {
             BartUtils.printWithDivider("Invalid number format after 'mark'. Please enter a valid index.");
 
@@ -109,7 +110,7 @@ public class Bart {
     /**
      * Handles the "todo" command to add a new todo task.
      *
-     * @param userInput The full user input string.
+     * @param userInput    The full user input string.
      * @param _listManager The ListManager instance to update.
      */
     private static void handleTodo(String userInput, ListManager _listManager) {
@@ -128,7 +129,7 @@ public class Bart {
     /**
      * Handles the "deadline" command to add a new deadline task.
      *
-     * @param userInput The full user input string.
+     * @param userInput    The full user input string.
      * @param _listManager The ListManager instance to update.
      */
     private static void handleDeadline(String userInput, ListManager _listManager) {
@@ -141,7 +142,6 @@ public class Bart {
 
         if (byIndex == -1) { // keyword is not found
             BartUtils.printWithDivider("input format incorrect");
-
 
         } else {
             String description = input.substring(0, byIndex);
@@ -158,7 +158,7 @@ public class Bart {
     /**
      * Handles the "event" command to add a new event task.
      *
-     * @param userInput The full user input string.
+     * @param userInput    The full user input string.
      * @param _listManager The ListManager instance to update.
      */
     private static void handleEvent(String userInput, ListManager _listManager) {
