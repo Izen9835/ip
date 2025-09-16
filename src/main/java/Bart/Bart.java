@@ -1,7 +1,12 @@
 package Bart;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
+import Bart.Exceptions.BartException;
+import Bart.IO.ListSaver;
+import Bart.ListManager.ListItem;
 import Bart.ListManager.ListManager;
 import Bart.Utils.BartUtils;
 
@@ -24,6 +29,8 @@ public class Bart {
         BartUtils.printWithDivider("Hello! I'm Bartholomew, but you can call me Bart.Bart" + System.lineSeparator() + "      What can I do for you?");
 
         _listManager.printItems();
+
+        readFromFile(_listManager);
 
 
         boolean isAnswering = true;
@@ -60,10 +67,16 @@ public class Bart {
             } else if (userInput.startsWith("event ")) {
                 handleEvent(userInput, _listManager);
 
+            } else if (userInput.startsWith("delete ")) {
+                handleDelete(userInput, _listManager);
+
             } else {
                 // key word unrecognised.
                 BartUtils.printWithDivider("input keyword not found");
             }
+
+            saveToFile(_listManager);
+
         }
         BartUtils.printWithDivider("Bye. Hope to see you again soon!");
 
@@ -191,6 +204,56 @@ public class Bart {
 
         }
     }
+
+    private static void handleDelete(String userInput, ListManager _listManager) {
+        try {
+            // Extract the number after "delete "
+            String numberStr = userInput.substring(7).trim();
+            int index = Integer.parseInt(numberStr);
+            String itemText = _listManager.deleteItem(index - 1); // convert to 0 indexing
+
+            BartUtils.printWithDivider("Task Removed: " + itemText);
+
+        } catch (NumberFormatException e) {
+            BartUtils.printWithDivider("Invalid number format after 'mark'. Please enter a valid index.");
+
+        } catch (BartException e) {
+            BartUtils.printWithDivider(e.getMessage());
+
+        }
+
+    }
+
+    private static void saveToFile(ListManager _listManager) {
+        List<ListItem> items = _listManager.getItems();
+        try {
+            ListSaver.saveToFile(items);
+
+        }
+        catch (IOException e) {
+            BartUtils.printWithDivider(e.getMessage());
+
+        }
+
+    }
+
+    private static void readFromFile(ListManager _listManager) {
+        try {
+            List<ListItem> items = ListSaver.parseFromFile();
+
+            _listManager.updateItems(items);
+
+            BartUtils.printWithDivider("list data retrieved successfully.");
+
+
+        }
+        catch (Exception e) {
+            BartUtils.printWithDivider("unable to read existing data, starting afresh.");
+
+        }
+    }
+
+
 }
 
 

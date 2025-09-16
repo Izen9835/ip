@@ -1,6 +1,7 @@
 package Bart.ListManager;
 
-class ListItem {
+// needs to be public to be accessible by Bart.IO
+public class ListItem {
     private boolean isMarked = false;
     private String description;
 
