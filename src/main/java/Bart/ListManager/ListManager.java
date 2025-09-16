@@ -1,5 +1,7 @@
 package Bart.ListManager;
 
+import Bart.Exceptions.BartException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,14 @@ public class ListManager {
 
     public ListManager() {
         this.items = new ArrayList<>();
+    }
+
+    public List<ListItem> getItems() {
+        return items;
+    }
+
+    public void updateItems(List<ListItem> items) {
+        this.items = items;
     }
 
     /**
@@ -56,6 +66,19 @@ public class ListManager {
         return event.toString();
     }
 
+    public String deleteItem(int index) throws BartException {
+        try {
+            ListItem item = items.get(index);
+            items.remove(index);
+
+            return item.toString();
+        }
+        catch (Exception e) {
+            throw new BartException("Failed to delete item: " + e.getMessage());
+        }
+
+    }
+
     public void markItem(int index) {
         items.get(index).markThis();
     }
@@ -70,7 +93,8 @@ public class ListManager {
     public void printItems() {
         for (int i = 0; i < items.toArray().length; i++) {
             // show index
-            System.out.print("       " + i + 1 + ". ");
+            int index = i + 1;
+            System.out.print("       " + index + ". ");
 
             // toString includes e.g. [D][ ] do this task (by: 8 Jan 2028)
             System.out.println(items.get(i).toString());
