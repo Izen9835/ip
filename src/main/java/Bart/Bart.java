@@ -1,9 +1,11 @@
 package Bart;
 
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import Bart.Commands.Command;
+import Bart.Exceptions.CorruptStorageException;
 import Bart.Exceptions.FileMissingException;
 import Bart.Exceptions.InvalidCommandException;
 import Bart.Exceptions.StorageException;
@@ -53,6 +55,11 @@ public class Bart {
             _ui.printWithDivider("No save data found, creating new..." + e.getMessage());
 
         }
+
+        catch (CorruptStorageException e) {
+            _ui.printWithDivider("Save data bad format?");
+
+        }
     }
 
     public void Run() {
@@ -72,8 +79,13 @@ public class Bart {
                 _ui.printWithDivider("InvalidCommandException: " + e.getMessage());
 
             }
+
             catch (StorageException e) {
                 _ui.printWithDivider("StorageException: " + e.getMessage());
+            }
+
+            catch (DateTimeParseException e) {
+                _ui.printWithDivider("DateTimeParseException: " + e.getMessage());
             }
 
         }

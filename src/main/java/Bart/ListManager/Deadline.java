@@ -1,11 +1,17 @@
 package Bart.ListManager;
 
-public class Deadline extends ListItem {
-    private String by;
+import Bart.Exceptions.InvalidCommandException;
 
-    public Deadline(String description, String by) {
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
+public class Deadline extends ListItem {
+    private LocalDate by;
+
+    public Deadline(String description, String by) throws DateTimeParseException {
         super(description);
-        this.by = by;
+        this.by = LocalDate.parse(by);
+
     }
 
     @Override

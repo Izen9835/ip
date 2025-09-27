@@ -7,8 +7,13 @@ import Bart.Ui.Ui;
 public class TodoCommand implements Command {
     private final String name;
 
-    public TodoCommand(String trimmedInput) {
-        name = trimmedInput.substring(5).trim();
+    public TodoCommand(String trimmedInput) throws InvalidCommandException {
+        try {
+            name = trimmedInput.substring(5).trim();
+        }
+        catch (StringIndexOutOfBoundsException e) {
+            throw new InvalidCommandException("no todo item was specified");
+        }
     }
 
     @Override
