@@ -2,6 +2,7 @@ package Bart.ListManager;
 
 import Bart.Exceptions.BartException;
 
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class TaskList {
      * @param by   The due date of the Deadline.
      * @return toString() of the added Deadline.
      */
-    public String addDeadline(String name, String by) {
+    public String addDeadline(String name, String by) throws DateTimeParseException {
         ListItem deadline = new Deadline(name, by);
         items.add(deadline);
 

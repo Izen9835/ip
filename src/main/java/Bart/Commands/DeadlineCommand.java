@@ -4,6 +4,8 @@ import Bart.Exceptions.InvalidCommandException;
 import Bart.ListManager.TaskList;
 import Bart.Ui.Ui;
 
+import java.time.format.DateTimeParseException;
+
 public class DeadlineCommand implements Command {
     private final String description;
     private final String by;
@@ -26,7 +28,7 @@ public class DeadlineCommand implements Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui) throws InvalidCommandException {
+    public void execute(TaskList tasks, Ui ui) throws InvalidCommandException, DateTimeParseException {
         String itemToString = tasks.addDeadline(description, by);
         ui.printWithDivider("deadline added." + System.lineSeparator() + "    " + itemToString);
 

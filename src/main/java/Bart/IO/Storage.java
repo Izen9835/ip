@@ -1,12 +1,11 @@
 package Bart.IO;
 
-import Bart.Exceptions.BartException;
-import Bart.Exceptions.FileMissingException;
-import Bart.Exceptions.StorageException;
+import Bart.Exceptions.*;
 import Bart.ListManager.*;
 import Bart.Ui.Ui;
 
 import java.io.*;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,14 +44,14 @@ public class Storage {
 
     }
 
-    private List<ListItem> parseFromFile() throws StorageException, FileMissingException{
+    private List<ListItem> parseFromFile() throws FileMissingException {
         List<ListItem> items = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.length() < 7) {
-                    throw new StorageException("Invalid line format: " + line);
+                    throw new CorruptStorageException("Invalid line format: " + line);
                 }
                 char type = line.charAt(1); // T, E, or D
                 boolean isMarked = line.charAt(4) == 'X';
@@ -110,8 +109,10 @@ public class Storage {
                 }
             }
         } catch (IOException e) {
-//            System.out.println(e.getMessage());
             throw new FileMissingException("No save data found: " + e.getMessage());
+
+        } catch (DateTimeParseException e) {
+            throw new CorruptStorageException("Save data corrupted: " + e.getMessage());
 
         }
 
