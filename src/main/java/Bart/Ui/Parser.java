@@ -38,6 +38,9 @@ public class Parser {
             case "delete":
                 return new DeleteCommand(trimmedInput);
 
+            case "find":
+                return new FindCommand(trimmedInput);
+
             default:
                 throw new InvalidCommandException("input keyword not found");
         }
