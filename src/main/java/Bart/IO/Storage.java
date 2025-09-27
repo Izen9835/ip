@@ -1,3 +1,8 @@
+
+/**
+ * Handles loading and saving of task data to and from a file.
+ * Responsible for persisting the user's task list between sessions.
+ */
 package Bart.IO;
 
 import Bart.Exceptions.*;
@@ -13,11 +18,20 @@ public class Storage {
 
     private final String fileName;
 
+
+    /**
+     * Constructs a Storage object for the specified file.
+     * @param fileName The path to the file for storing task data.
+     */
     public Storage(String fileName) {
         this.fileName = fileName;
-
     }
 
+    /**
+     * Saves the given list of tasks to the file.
+     * @param items The list of tasks to save.
+     * @throws StorageException if an I/O error occurs during saving.
+     */
     public void saveToFile(List<ListItem> items) throws StorageException{
         File file = new File(fileName);
 
@@ -38,12 +52,22 @@ public class Storage {
         }
     }
 
+
+    /**
+     * Loads tasks from the file and updates the given task list.
+     * @param _taskList The task list to update with loaded tasks.
+     * @throws FileMissingException if the file is missing or cannot be read.
+     */
     public void saveFromFile(TaskList _taskList) throws FileMissingException {
         List<ListItem> items = this.parseFromFile();
         _taskList.updateItems(items);
-
     }
 
+    /**
+     * Parses the file and reconstructs the list of tasks from its contents.
+     * @return The list of tasks loaded from the file.
+     * @throws FileMissingException if the file is missing or cannot be read.
+     */
     private List<ListItem> parseFromFile() throws FileMissingException {
         List<ListItem> items = new ArrayList<>();
 
