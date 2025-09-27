@@ -1,22 +1,30 @@
-package Bart.Utils;
+package Bart.Ui;
 
-public class BartUtils {
+import java.util.Scanner;
 
-    public static void print(String msg) {
+public class Ui {
+
+    private final Scanner in;
+
+    public Ui () {
+        in = new Scanner(System.in);
+    }
+
+    public void print(String msg) {
         System.out.println("    " + msg);
     }
 
-    public static void divider() {
+    public void divider() {
         System.out.println("    ____________________________________________________________");
     }
 
-    public static void printWithDivider(String text) {
+    public void printWithDivider(String text) {
         divider();
         print(text);
         divider();
     }
 
-    public static void printASCIIName() {
+    public void printASCIIName() {
         String[] logo = {
                 " ____             _   _           _                               ",
                 "| __ )  __ _ _ __| |_| |__   ___ | | ___  _ __ ___   _____      __",
@@ -28,4 +36,19 @@ public class BartUtils {
             System.out.println(logo[i]);
         }
     }
+
+    public void showWelcome() {
+        print("Hello from");
+        printASCIIName();
+        printWithDivider("Hello! I'm Bartholomew, but you can call me Bart.Bart" + System.lineSeparator() + "      What can I do for you?");
+    }
+
+    public String readCommand() {
+        if (in.hasNextLine()) {
+            return in.nextLine();
+        } else {
+            return null;
+        }
+    }
+
 }

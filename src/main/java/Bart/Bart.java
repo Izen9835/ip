@@ -2,13 +2,16 @@ package Bart;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
 
-import Bart.Exceptions.BartException;
-import Bart.IO.ListSaver;
+import Bart.Commands.Command;
+import Bart.Exceptions.FileMissingException;
+import Bart.Exceptions.InvalidCommandException;
+import Bart.Exceptions.StorageException;
+import Bart.IO.Storage;
 import Bart.ListManager.ListItem;
-import Bart.ListManager.ListManager;
-import Bart.Utils.BartUtils;
+import Bart.ListManager.TaskList;
+import Bart.Ui.Parser;
+import Bart.Ui.Ui;
 
 /**
  * The main entry point for the Bart.Bart chatbot application.
@@ -16,241 +19,66 @@ import Bart.Utils.BartUtils;
  */
 public class Bart {
 
+    private final Ui _ui;
+    private final TaskList _taskList;
+    private final Storage _storage;
+
+
     /**
      * Starts the Bart.Bart chatbot application.
      * Initializes the Bart.ListManager and processes user commands in a loop until "bye" is entered.
      */
+
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        ListManager _listManager = new ListManager();
+        new Bart("./data/data.txt").Run();
+    }
 
-        BartUtils.print("Hello from");
-        BartUtils.printASCIIName();
-        BartUtils.printWithDivider("Hello! I'm Bartholomew, but you can call me Bart.Bart" + System.lineSeparator() + "      What can I do for you?");
+    public Bart(String filePath) {
+        _ui = new Ui();
+        _taskList = new TaskList();
+        _storage = new Storage(filePath);
 
-        _listManager.printItems();
+        _ui.showWelcome();
 
-        readFromFile(_listManager);
+        try {
+            _storage.saveFromFile(_taskList);
+            _ui.printWithDivider("Save data retrieved.");
 
+        }
+        catch (StorageException e) {
+            _ui.printWithDivider("StorageException: " + e.getMessage());
 
-        boolean isAnswering = true;
+        }
+        catch (FileMissingException e) {
+            _ui.printWithDivider("No save data found, creating new..." + e.getMessage());
 
-        while (isAnswering) {
+        }
+    }
 
-            // read user input
-            if (!in.hasNextLine()) {
-                break; // end input gracefully if no more lines
+    public void Run() {
+
+        boolean isExit = false;
+
+        while (!isExit) {
+            try {
+                String userInput = _ui.readCommand();
+                Command c = Parser.parse(userInput);
+                c.execute(_taskList, _ui);
+                isExit = c.isExit();
+                _storage.saveToFile(_taskList.getItems());
+
             }
-            String userInput = in.nextLine();
+            catch (InvalidCommandException e) {
+                _ui.printWithDivider("InvalidCommandException: " + e.getMessage());
 
-            if (userInput.equals("bye")) {
-                isAnswering = false;
-                break;
-
-            } else if (userInput.equals("list")) {
-                BartUtils.divider();
-                _listManager.printItems();
-                BartUtils.divider();
-
-            } else if (userInput.startsWith("mark ")) {
-                handleMark(userInput, _listManager);
-
-            } else if (userInput.startsWith("unmark ")) {
-                handleUnmark(userInput, _listManager);
-
-            } else if (userInput.startsWith("todo ")) {
-                handleTodo(userInput, _listManager);
-
-            } else if (userInput.startsWith("deadline ")) {
-                handleDeadline(userInput, _listManager);
-
-            } else if (userInput.startsWith("event ")) {
-                handleEvent(userInput, _listManager);
-
-            } else if (userInput.startsWith("delete ")) {
-                handleDelete(userInput, _listManager);
-
-            } else {
-                // key word unrecognised.
-                BartUtils.printWithDivider("input keyword not found");
+            }
+            catch (StorageException e) {
+                _ui.printWithDivider("StorageException: " + e.getMessage());
             }
 
-            saveToFile(_listManager);
-
-        }
-        BartUtils.printWithDivider("Bye. Hope to see you again soon!");
-
-    }
-
-    /**
-     * Handles the "mark" command to mark a task as done.
-     *
-     * @param userInput    The full user input string.
-     * @param _listManager The Bart.ListManager instance to update.
-     */
-    private static void handleMark(String userInput, ListManager _listManager) {
-        try {
-            // Extract the number after "mark "
-            String numberStr = userInput.substring(5).trim();
-            int index = Integer.parseInt(numberStr);
-            _listManager.markItem(index - 1); // convert to 0 indexing
-            BartUtils.printWithDivider("Marked item " + index);
-
-        } catch (NumberFormatException e) {
-            BartUtils.printWithDivider("Invalid number format after 'mark'. Please enter a valid index.");
-
-        }
-    }
-
-    /**
-     * Handles the "unmark" command to mark a task as not done.
-     *
-     * @param userInput    The full user input string.
-     * @param _listManager The Bart.ListManager instance to update.
-     */
-    private static void handleUnmark(String userInput, ListManager _listManager) {
-        try {
-            // Extract the number after "mark "
-            String numberStr = userInput.substring(7).trim();
-            int index = Integer.parseInt(numberStr);
-            _listManager.unmarkItem(index - 1); // convert to 0 indexing
-            BartUtils.printWithDivider("Unmarked item " + index);
-
-        } catch (NumberFormatException e) {
-            BartUtils.printWithDivider("Invalid number format after 'mark'. Please enter a valid index.");
-
-        }
-    }
-
-    /**
-     * Handles the "todo" command to add a new todo task.
-     *
-     * @param userInput    The full user input string.
-     * @param _listManager The Bart.ListManager instance to update.
-     */
-    private static void handleTodo(String userInput, ListManager _listManager) {
-        String name = userInput.substring(5).trim();
-
-        if (name.isBlank()) {
-            BartUtils.printWithDivider("no todo item was specified.");
-
-        } else {
-            String itemToString = _listManager.addTodo(name);
-            BartUtils.printWithDivider("todo added." + System.lineSeparator() + "  " + itemToString);
-
-        }
-    }
-
-    /**
-     * Handles the "deadline" command to add a new deadline task.
-     *
-     * @param userInput    The full user input string.
-     * @param _listManager The Bart.ListManager instance to update.
-     */
-    private static void handleDeadline(String userInput, ListManager _listManager) {
-        // remove "deadline "
-        // for parsing
-        String input = userInput.substring(9).trim();
-
-        // find index of "/by"
-        int byIndex = input.indexOf(" /by ");
-
-        if (byIndex == -1) { // keyword is not found
-            BartUtils.printWithDivider("input format incorrect");
-
-        } else {
-            String description = input.substring(0, byIndex);
-
-            String by = input.substring(byIndex + " /by ".length());
-
-            // add to list
-            String itemToString = _listManager.addDeadline(description, by);
-            BartUtils.printWithDivider("deadline added." + System.lineSeparator() + "    " + itemToString);
-
-        }
-    }
-
-    /**
-     * Handles the "event" command to add a new event task.
-     *
-     * @param userInput    The full user input string.
-     * @param _listManager The Bart.ListManager instance to update.
-     */
-    private static void handleEvent(String userInput, ListManager _listManager) {
-        // remove the "event " in front
-        // for parsing input
-        String input = userInput.substring(6).trim();
-
-        // find indices of the keywords
-        int fromIndex = input.indexOf(" /from ");
-        int toIndex = input.indexOf(" /to ");
-
-        if (fromIndex == -1 || toIndex == -1) { // keyword is missing
-            BartUtils.printWithDivider("input format incorrect");
-
-        } else {
-            // parse task description between "event " and "/from"
-            String description = input.substring(0, fromIndex);
-
-            // parse start time after "/from " and before "/to"
-            String start = input.substring(fromIndex + " /from ".length(), toIndex);
-
-            // parse end time after "/to "
-            String end = input.substring(toIndex + " /to ".length());
-
-            // add to list
-            String itemToString = _listManager.addEvent(description, start, end);
-            BartUtils.printWithDivider("event added." + System.lineSeparator() + "  " + itemToString);
-
-        }
-    }
-
-    private static void handleDelete(String userInput, ListManager _listManager) {
-        try {
-            // Extract the number after "delete "
-            String numberStr = userInput.substring(7).trim();
-            int index = Integer.parseInt(numberStr);
-            String itemText = _listManager.deleteItem(index - 1); // convert to 0 indexing
-
-            BartUtils.printWithDivider("Task Removed: " + itemText);
-
-        } catch (NumberFormatException e) {
-            BartUtils.printWithDivider("Invalid number format after 'mark'. Please enter a valid index.");
-
-        } catch (BartException e) {
-            BartUtils.printWithDivider(e.getMessage());
-
         }
 
-    }
 
-    private static void saveToFile(ListManager _listManager) {
-        List<ListItem> items = _listManager.getItems();
-        try {
-            ListSaver.saveToFile(items);
-
-        }
-        catch (IOException e) {
-            BartUtils.printWithDivider(e.getMessage());
-
-        }
-
-    }
-
-    private static void readFromFile(ListManager _listManager) {
-        try {
-            List<ListItem> items = ListSaver.parseFromFile();
-
-            _listManager.updateItems(items);
-
-            BartUtils.printWithDivider("list data retrieved successfully.");
-
-
-        }
-        catch (Exception e) {
-            BartUtils.printWithDivider("unable to read existing data, starting afresh.");
-
-        }
     }
 
 

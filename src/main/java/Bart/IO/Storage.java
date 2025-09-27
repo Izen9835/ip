@@ -1,34 +1,58 @@
 package Bart.IO;
 
 import Bart.Exceptions.BartException;
-import Bart.ListManager.Deadline;
-import Bart.ListManager.Event;
-import Bart.ListManager.ListItem;
-import Bart.ListManager.Todo;
+import Bart.Exceptions.FileMissingException;
+import Bart.Exceptions.StorageException;
+import Bart.ListManager.*;
+import Bart.Ui.Ui;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListSaver {
-    public static void saveToFile(List<ListItem> items) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data.txt"))) {
+public class Storage {
+
+    private final String fileName;
+
+    public Storage(String fileName) {
+        this.fileName = fileName;
+
+    }
+
+    public void saveToFile(List<ListItem> items) throws StorageException{
+        File file = new File(fileName);
+
+        // create parent directories if needed
+        File parent = file.getParentFile();
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (ListItem item : items) {
                 writer.write(item.toString());
                 writer.newLine();
             }
+        } catch (IOException e) {
+            throw new StorageException("StorageException: " + e.getMessage());
+
         }
     }
 
-    public static List<ListItem> parseFromFile() throws BartException {
+    public void saveFromFile(TaskList _taskList) throws FileMissingException {
+        List<ListItem> items = this.parseFromFile();
+        _taskList.updateItems(items);
+
+    }
+
+    private List<ListItem> parseFromFile() throws StorageException, FileMissingException{
         List<ListItem> items = new ArrayList<>();
-        String fileName = "data.txt";
 
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.length() < 7) {
-                    throw new BartException("Invalid line format: " + line);
+                    throw new StorageException("Invalid line format: " + line);
                 }
                 char type = line.charAt(1); // T, E, or D
                 boolean isMarked = line.charAt(4) == 'X';
@@ -47,14 +71,14 @@ public class ListSaver {
                         int startIndex = line.indexOf("] ") + 2;
                         int fromIndex = line.indexOf("(from: ");
                         if (fromIndex == -1) {
-                            throw new BartException("Missing (from:) in event line: " + line);
+                            throw new StorageException("Missing (from:) in event line: " + line);
                         }
                         String name = line.substring(startIndex, fromIndex - 1);
 
                         int toIndex = line.indexOf(" to: ");
                         int endIndex = line.indexOf(")", toIndex);
                         if (toIndex == -1 || endIndex == -1) {
-                            throw new BartException("Invalid event time format in line: " + line);
+                            throw new StorageException("Invalid event time format in line: " + line);
                         }
 
                         String start = line.substring(fromIndex + 7, toIndex);
@@ -71,7 +95,7 @@ public class ListSaver {
                         int byIndex = line.indexOf("(by: ");
                         int endIndex = line.indexOf(")", byIndex);
                         if (byIndex == -1 || endIndex == -1) {
-                            throw new BartException("Invalid deadline format in line: " + line);
+                            throw new StorageException("Invalid deadline format in line: " + line);
                         }
                         String name = line.substring(startIndex, byIndex - 1);
                         String by = line.substring(byIndex + 5, endIndex);
@@ -82,11 +106,13 @@ public class ListSaver {
                         break;
                     }
                     default:
-                        throw new BartException("Unknown task type in line: " + line);
+                        throw new StorageException("Unknown task type in line: " + line);
                 }
             }
         } catch (IOException e) {
-            throw new BartException("Error reading file: " + e.getMessage());
+//            System.out.println(e.getMessage());
+            throw new FileMissingException("No save data found: " + e.getMessage());
+
         }
 
         return items;

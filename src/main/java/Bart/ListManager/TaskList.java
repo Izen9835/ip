@@ -9,10 +9,10 @@ import java.util.List;
  * Manages a list of tasks, including todos, deadlines, and events.
  * Provides methods to add, mark, unmark, and print tasks.
  */
-public class ListManager {
+public class TaskList {
     private List<ListItem> items;
 
-    public ListManager() {
+    public TaskList() {
         this.items = new ArrayList<>();
     }
 
@@ -66,17 +66,11 @@ public class ListManager {
         return event.toString();
     }
 
-    public String deleteItem(int index) throws BartException {
-        try {
-            ListItem item = items.get(index);
-            items.remove(index);
+    public String deleteItem(int index) {
+        ListItem item = items.get(index);
+        items.remove(index);
 
-            return item.toString();
-        }
-        catch (Exception e) {
-            throw new BartException("Failed to delete item: " + e.getMessage());
-        }
-
+        return item.toString();
     }
 
     public void markItem(int index) {
