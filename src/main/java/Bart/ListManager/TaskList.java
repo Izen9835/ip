@@ -95,4 +95,16 @@ public class TaskList {
             System.out.println(items.get(i).toString());
         }
     }
+
+    public List<ListItem> find(String keyword) {
+        List<ListItem> matchingItems = new ArrayList<>();
+
+        for (ListItem item : items) {
+            if (item.toString().toLowerCase().contains(keyword.toLowerCase())) {
+                matchingItems.add(item);
+            }
+        }
+
+        return matchingItems;
+    }
 }
