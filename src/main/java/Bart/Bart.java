@@ -1,8 +1,6 @@
 package Bart;
 
-import java.io.IOException;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 
 import Bart.Commands.Command;
 import Bart.Exceptions.CorruptStorageException;
@@ -10,7 +8,6 @@ import Bart.Exceptions.FileMissingException;
 import Bart.Exceptions.InvalidCommandException;
 import Bart.Exceptions.StorageException;
 import Bart.IO.Storage;
-import Bart.ListManager.ListItem;
 import Bart.ListManager.TaskList;
 import Bart.Ui.Parser;
 import Bart.Ui.Ui;
@@ -26,18 +23,6 @@ public class Bart {
     private final TaskList _taskList;
     private final Storage _storage;
 
-
-
-    /**
-     * Starts the Bart chatbot application.
-     * Initializes components and processes user commands until exit is requested.
-     */
-
-    public static void main(String[] args) {
-        new Bart("./data/data.txt").Run();
-    }
-
-
     /**
      * Constructs a Bart instance, initializing UI, task list, and storage.
      * Loads saved data if available, or creates new storage if not.
@@ -51,15 +36,15 @@ public class Bart {
         try {
             _storage.saveFromFile(_taskList);
             _ui.printWithDivider("Save data retrieved.");
-        }
-        catch (StorageException e) {
+        } catch (StorageException e) {
             _ui.printWithDivider("StorageException: " + e.getMessage());
-        }
-        catch (FileMissingException e) {
+
+        } catch (FileMissingException e) {
             _ui.printWithDivider("No save data found, creating new..." + e.getMessage());
-        }
-        catch (CorruptStorageException e) {
+
+        } catch (CorruptStorageException e) {
             _ui.printWithDivider("Save data bad format?");
+
         }
     }
 
@@ -68,7 +53,7 @@ public class Bart {
      * Runs the main command loop, processing user input until exit is requested.
      * Handles command execution and error reporting.
      */
-    public void Run() {
+    public void run() {
         boolean isExit = false;
         while (!isExit) {
             try {
@@ -77,17 +62,27 @@ public class Bart {
                 c.execute(_taskList, _ui);
                 isExit = c.isExit();
                 _storage.saveToFile(_taskList.getItems());
-            }
-            catch (InvalidCommandException e) {
+
+            } catch (InvalidCommandException e) {
                 _ui.printWithDivider("InvalidCommandException: " + e.getMessage());
-            }
-            catch (StorageException e) {
+
+            } catch (StorageException e) {
                 _ui.printWithDivider("StorageException: " + e.getMessage());
-            }
-            catch (DateTimeParseException e) {
+
+            } catch (DateTimeParseException e) {
                 _ui.printWithDivider("DateTimeParseException: " + e.getMessage());
+
             }
         }
+    }
+
+    /**
+     * Starts the Bart chatbot application.
+     * Initializes components and processes user commands until exit is requested.
+     */
+
+    public static void main(String[] args) {
+        new Bart("./data/data.txt").run();
     }
 
 

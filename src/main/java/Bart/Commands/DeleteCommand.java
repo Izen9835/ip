@@ -5,7 +5,6 @@
  */
 package Bart.Commands;
 
-import Bart.Exceptions.BartException;
 import Bart.Exceptions.InvalidCommandException;
 import Bart.ListManager.TaskList;
 import Bart.Ui.Ui;

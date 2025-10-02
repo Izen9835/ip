@@ -21,9 +21,10 @@ public class TodoCommand implements Command {
     public TodoCommand(String trimmedInput) throws InvalidCommandException {
         try {
             name = trimmedInput.substring(5).trim();
-        }
-        catch (StringIndexOutOfBoundsException e) {
+
+        } catch (StringIndexOutOfBoundsException e) {
             throw new InvalidCommandException("no todo item was specified");
+
         }
     }
 

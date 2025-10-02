@@ -5,7 +5,16 @@
  */
 package Bart.Ui;
 
-import Bart.Commands.*;
+import Bart.Commands.Command;
+import Bart.Commands.ExitCommand;
+import Bart.Commands.ListCommand;
+import Bart.Commands.MarkCommand;
+import Bart.Commands.DeadlineCommand;
+import Bart.Commands.EventCommand;
+import Bart.Commands.TodoCommand;
+import Bart.Commands.UnmarkCommand;
+import Bart.Commands.DeleteCommand;
+import Bart.Commands.FindCommand;
 import Bart.Exceptions.InvalidCommandException;
 
 public class Parser {
@@ -23,35 +32,35 @@ public class Parser {
         String trimmedInput = input.trim();
         String commandWord = trimmedInput.split("\\s+", 2)[0];
         switch (commandWord) {
-            case "bye":
-                return new ExitCommand();
+        case "bye":
+            return new ExitCommand();
 
-            case "list":
-                return new ListCommand();
+        case "list":
+            return new ListCommand();
 
-            case "mark":
-                return new MarkCommand(trimmedInput);
+        case "mark":
+            return new MarkCommand(trimmedInput);
 
-            case "unmark":
-                return new UnmarkCommand(trimmedInput);
+        case "unmark":
+            return new UnmarkCommand(trimmedInput);
 
-            case "todo":
-                return new TodoCommand(trimmedInput);
+        case "todo":
+            return new TodoCommand(trimmedInput);
 
-            case "deadline":
-                return new DeadlineCommand(trimmedInput);
+        case "deadline":
+            return new DeadlineCommand(trimmedInput);
 
-            case "event":
-                return new EventCommand(trimmedInput);
+        case "event":
+            return new EventCommand(trimmedInput);
 
-            case "delete":
-                return new DeleteCommand(trimmedInput);
+        case "delete":
+            return new DeleteCommand(trimmedInput);
 
-            case "find":
-                return new FindCommand(trimmedInput);
+        case "find":
+            return new FindCommand(trimmedInput);
 
-            default:
-                throw new InvalidCommandException("input keyword not found");
+        default:
+            throw new InvalidCommandException("input keyword not found");
         }
     }
 }

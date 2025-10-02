@@ -5,8 +5,6 @@
  */
 package Bart.ListManager;
 
-import Bart.Exceptions.BartException;
-
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;

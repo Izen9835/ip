@@ -1,7 +1,5 @@
 package Bart.ListManager;
 
-import Bart.Exceptions.InvalidCommandException;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
