@@ -1,9 +1,21 @@
 list
-deadline read books /by 8 Jan 2029
-event birthday /from 12 August /to 12 August
+event open house /from 2010-10-2 /to 2015-10-2
+deadline homework 1 /by 2003-10-21
+todo groceries
 list
 mark 1
+mark 2
+mark 4
+delete 5
+event bruh /to 4-3-2020
 list
-unmark 1
+deadline homework 2 /by 2003-08-12
+find homework
+mark 3
 list
+delete 1
+delete 1
+delete 1
+delete 1
+delete 1
 bye
