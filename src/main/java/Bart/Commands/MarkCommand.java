@@ -27,9 +27,12 @@ public class MarkCommand implements Command {
             }
         } catch (NumberFormatException e) {
             throw new InvalidCommandException("Invalid number format after 'mark'. Please enter a valid index.");
+
         } catch (StringIndexOutOfBoundsException e) {
             throw new InvalidCommandException("No index provided after 'mark'.");
+
         }
+
     }
 
 
@@ -39,9 +42,15 @@ public class MarkCommand implements Command {
      * @param ui The UI for displaying output.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui) {
-        tasks.markItem(index - 1);
-        ui.printWithDivider("Marked item " + index);
+    public void execute(TaskList tasks, Ui ui) throws InvalidCommandException {
+        try {
+            tasks.markItem(index - 1);
+            ui.printWithDivider("Marked item " + index);
+
+        } catch (IndexOutOfBoundsException e) {
+            throw new InvalidCommandException("invalid item was specified");
+        }
+
     }
 
     /**

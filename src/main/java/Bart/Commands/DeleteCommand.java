@@ -24,6 +24,10 @@ public class DeleteCommand implements Command {
             index = Integer.parseInt(numberStr);
         } catch (NumberFormatException e) {
             throw new InvalidCommandException("Invalid number format after 'mark'. Please enter a valid index.");
+
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new InvalidCommandException("no item was specified");
+
         }
     }
 
@@ -34,9 +38,14 @@ public class DeleteCommand implements Command {
      * @param ui The UI for displaying output.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui) {
-        String itemText = tasks.deleteItem(index - 1);
-        ui.printWithDivider("Task Removed: " + itemText);
+    public void execute(TaskList tasks, Ui ui) throws InvalidCommandException {
+        try {
+            String itemText = tasks.deleteItem(index - 1);
+            ui.printWithDivider("Task Removed: " + itemText);
+
+        } catch (IndexOutOfBoundsException e) {
+            throw new InvalidCommandException("invalid item was specified");
+        }
     }
 
     /**

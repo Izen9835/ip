@@ -22,13 +22,23 @@ public class DeadlineCommand implements Command {
      * @throws InvalidCommandException if the "/by" parameter is missing.
      */
     public DeadlineCommand(String trimmedInput) throws InvalidCommandException {
+        if (trimmedInput.length() < 9) {
+            throw new InvalidCommandException("Input too short for deadline command");
+        }
+
         String input = trimmedInput.substring(9).trim();
         int byIndex = input.indexOf(" /by ");
+
         if (byIndex == -1) {
             throw new InvalidCommandException("/by not specified!");
         }
+
         description = input.substring(0, byIndex);
         by = input.substring(byIndex + " /by ".length());
+
+        if (description.isBlank()) {
+            throw new InvalidCommandException("no name specified");
+        }
     }
 
 

@@ -36,11 +36,14 @@ public class Bart {
         try {
             _storage.saveFromFile(_taskList);
             _ui.printWithDivider("Save data retrieved.");
+
         } catch (StorageException e) {
             _ui.printWithDivider("StorageException: " + e.getMessage());
 
+
         } catch (FileMissingException e) {
             _ui.printWithDivider("No save data found, creating new..." + e.getMessage());
+
 
         } catch (CorruptStorageException e) {
             _ui.printWithDivider("Save data bad format?");
@@ -70,7 +73,7 @@ public class Bart {
                 _ui.printWithDivider("StorageException: " + e.getMessage());
 
             } catch (DateTimeParseException e) {
-                _ui.printWithDivider("DateTimeParseException: " + e.getMessage());
+                _ui.printWithDivider("DateTimeParseException: " + e.getMessage() + " Format: YYYY-MM-DD");
 
             }
         }

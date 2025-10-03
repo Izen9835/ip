@@ -23,6 +23,10 @@ public class EventCommand implements Command {
      * @throws InvalidCommandException if required parameters are missing.
      */
     public EventCommand(String trimmedInput) throws InvalidCommandException {
+        if (trimmedInput.length() < 6) {
+            throw new InvalidCommandException("Input too short for event command");
+        }
+
         String input = trimmedInput.substring(6).trim();
         int fromIndex = input.indexOf(" /from ");
         int toIndex = input.indexOf(" /to ");
@@ -35,6 +39,10 @@ public class EventCommand implements Command {
         description = input.substring(0, fromIndex);
         start = input.substring(fromIndex + " /from ".length(), toIndex);
         end = input.substring(toIndex + " /to ".length());
+
+        if (description.isBlank()) {
+            throw new InvalidCommandException("no name specified");
+        }
     }
 
 
